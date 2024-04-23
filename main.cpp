@@ -152,6 +152,17 @@
 
 void lu_decomposition(int n, double* A, double* L, double* U);
 
+void printMatrix(double* A, int n, int m) {
+	printf("\n");
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            printf("%lf ", A[i * n + j]);
+        }
+        printf("\n");
+    }
+	printf("\n");
+}
+
 int main(int argc, char** argv){
     int n = 2;
     double* A = (double *) malloc(sizeof(double) * n * n);
@@ -159,22 +170,8 @@ int main(int argc, char** argv){
     double* U = (double *) malloc(sizeof(double) * n * n);
     A[0] = 10; A[1] = 5; A[2] = 9; A[3] = 7;
     lu_decomposition(n, A, L, U);
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            printf("%lf ", A[i * n + j]);
-        }
-        printf("\n");
-    }
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            printf("%lf ", L[i * n + j]);
-        }
-        printf("\n");
-    }
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            printf("%lf ", U[i * n + j]);
-        }
-        printf("\n");
-    }
+    printMatrix(A, n, n);
+    printMatrix(L, n, n);
+    printMatrix(U, n, n);
 }
+
