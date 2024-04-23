@@ -17,8 +17,8 @@ endif ()
 
 add_executable(serial main.cpp serial.cpp)
 
-# add_executable(openmp main.cpp openmp.cpp common.h)
-# target_link_libraries(openmp PRIVATE OpenMP::OpenMP_CXX)
+add_executable(openmp main.cpp openmp.cpp)
+target_link_libraries(openmp PRIVATE OpenMP::OpenMP_CXX)
 
 # Copy the job scripts
 # configure_file(job-serial job-serial COPYONLY)
