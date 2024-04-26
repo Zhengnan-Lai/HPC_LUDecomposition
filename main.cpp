@@ -153,11 +153,11 @@
 void lu_decomposition(int n, double* A, double* L, double* U);
 
 int main(int argc, char** argv){
-    int n = 2;
+    int n = 4;
     double* A = (double *) malloc(sizeof(double) * n * n);
     double* L = (double *) malloc(sizeof(double) * n * n);
     double* U = (double *) malloc(sizeof(double) * n * n);
-    A[0] = 10; A[1] = 5; A[2] = 9; A[3] = 7;
+    for(int i = 1; i <= n * n; i++) A[i-1] = (i*i) % 10;
     lu_decomposition(n, A, L, U);
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
@@ -165,12 +165,14 @@ int main(int argc, char** argv){
         }
         printf("\n");
     }
+    printf("\n");
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             printf("%lf ", L[i * n + j]);
         }
         printf("\n");
     }
+    printf("\n");
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             printf("%lf ", U[i * n + j]);
