@@ -30,12 +30,15 @@ void lu_decomposition(int n, double* A, double* L, double* U, int rank, int num_
 	int colsPerProcessor = (n + num_procs - 1) / num_procs;
 	int startCol = std::min(rank * colsPerProcessor, n);
 	int endCol = std::min((rank + 1) * colsPerProcessor, n);
-	printf("startCol = %d, endCol = %d\n\n", startCol, endCol);
+
+    for(int i = 0; i < n; i++) for(int j = 0; j < n; j++){
+        U[i * n + j] = A[i * n + j];
+    }
 
 	for (int k = 0; k < n-1; k++) {
 		if (startCol <= k && endCol > k) {
 			for (int i = k + 1; i < n; i++) {
-				L[i * n + k] = A[i * n + k] / A[k * n + k];
+				L[i * n + k] = U[i * n + k] / U[k * n + k];
 			}
 		}
 
@@ -48,8 +51,12 @@ void lu_decomposition(int n, double* A, double* L, double* U, int rank, int num_
 
 		for (int j = std::max(k+1, startCol); j < endCol; j++) {
 			for (int i = k + 1; i < n; i++) {
-				A[i * n + j] = A[i * n + j] - L[i * n + k] * A[k * n + j];
+				U[i * n + j] = U[i * n + j] - L[i * n + k] * U[k * n + j];
 			}
 		}
 	}
+
+    for(int i = 0; i < n; i++) for(int j = 0; j < i; j++){
+        U[i * n + j] = 0;
+    }
 }

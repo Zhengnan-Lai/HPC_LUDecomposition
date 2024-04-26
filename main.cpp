@@ -80,7 +80,6 @@ int main(int argc, char** argv){
 	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    printMatrix(A, n, n);
     lu_decomposition(n, A, L, U, rank, num_procs);
     printMatrix(A, n, n);
     printMatrix(L, n, n);
