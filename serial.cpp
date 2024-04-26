@@ -6,7 +6,7 @@ const char* lu_desc = "Naive LU decomposition.";
  * where A, L, and U are lda-by-lda matrices stored in row-major format.
  * On exit, A maintain its input values.
  */
-void lu_decomposition(int n, double* A, double* L, double* U) {
+void lu_decomposition(int n, double* A, double* L, double* U, int rank, int num_procs) {
     for(int i = 0; i < n; i++) for(int j = i; j < n; j++){
         U[i * n + j] = A[i * n + j];
     }
