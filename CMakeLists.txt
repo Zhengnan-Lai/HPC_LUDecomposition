@@ -4,7 +4,8 @@ project(HPC_LUDecomposition)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 
-find_package(OpenMP REQUIRED)
+find_package(MPI REQUIRED)
+# find_package(OpenMP REQUIRED)
 
 # We require the GNU compiler for this assignment.
 if (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
@@ -17,8 +18,10 @@ endif ()
 
 add_executable(serial main.cpp serial.cpp)
 
-add_executable(openmp main.cpp openmp.cpp)
-target_link_libraries(openmp PRIVATE OpenMP::OpenMP_CXX)
+# add_executable(openmp main.cpp openmp.cpp)
+ add_executable(mpi main.cpp mpi.cpp)
+ target_link_libraries(mpi PRIVATE MPI::MPI_CXX)
+# target_link_libraries(openmp PRIVATE OpenMP::OpenMP_CXX)
 
 # Copy the job scripts
 # configure_file(job-serial job-serial COPYONLY)
