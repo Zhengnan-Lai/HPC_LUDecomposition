@@ -38,10 +38,10 @@ char* find_string_option(int argc, char** argv, const char* option, char* defaul
     return default_value;
 }
 
-void lu_decomposition(int n, double* A, double* L, double* U, int rank, int num_procs);
+void lu_decomposition(int n, double* A, double* L, int rank, int num_procs);
 
-void printMatrix(double* A, int n, int m) {
-	printf("\n");
+void printMatrix(double* A, int n, int m, char name) {
+	printf("[%c]\n", name);
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
             printf("%lf ", A[i * n + j]);
@@ -74,15 +74,17 @@ int main(int argc, char** argv){
 	for (int i = 1; i <= n * n; i++) {
 		A[i-1] = i % 10;
 	}
+    printMatrix(A, n, n, 'A');
 
 	int num_procs, rank;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    lu_decomposition(n, A, L, U, rank, num_procs);
-    printMatrix(A, n, n);
-    printMatrix(L, n, n);
-    printMatrix(U, n, n);
+    lu_decomposition(n, A, L, rank, num_procs);
+    if(rank == 0){ 
+        printMatrix(L, n, n, 'L');
+        printMatrix(A, n, n, 'U');
+    }
 }
 
