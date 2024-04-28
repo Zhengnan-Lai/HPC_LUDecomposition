@@ -5,6 +5,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <cassert>
 #include <time.h>
 #include <mpi.h>
 
@@ -51,7 +52,7 @@ char* find_string_option(int argc, char** argv, const char* option, char* defaul
 
 void lu_decomposition(int n, double* A, double* L, int rank, int num_procs);
 
-void printMatrix(double* A, int n, int m, char name) {
+void print_matrix(double* A, int n, int m, char name) {
 	printf("[%c]\n", name);
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
@@ -62,13 +63,23 @@ void printMatrix(double* A, int n, int m, char name) {
 	printf("\n");
 }
 
-void generateMatrix(double* A, int n, int seed){
+void generate_matrix(double* A, int n, int seed){
     std::random_device rd;
     std::mt19937 gen(seed ? seed : rd());
     for (int i = 0; i < n * n; i++) {
 		std::uniform_real_distribution<float> rand_real(-10.0, 10.0);
         A[i] = rand_real(gen);
 	}
+}
+
+void check_correctness(double* A, double* L, double* U, int n){
+    for(int i = 0; i < n; i++) for(int j = 0 ; j < n; j++){
+        for(int k = 0; k < n; k++){
+            A[i * n + j] -= L[i * n + k] * U[k * n + j];
+        }
+        assert(std::abs(A[i * n + j]) < 1e-3);
+    }
+
 }
 
 // ==============
@@ -83,11 +94,13 @@ int main(int argc, char** argv){
         std::cout << "-n <int>: size of matrices" << std::endl;
         std::cout << "-o <filename>: set the output file name" << std::endl;
         std::cout << "-s <int>: set matrix initialization seed" << std::endl;
+        std::cout << "-c <int>: check correctness of the result" << std::endl;
         return 0;
     }
     char* savename = find_string_option(argc, argv, "-o", nullptr);
     std::ofstream fsave(savename);
     int n = find_int_arg(argc, argv, "-n", 50);
+    int check_correct = find_int_arg(argc, argv, "-c", 0);
     int seed = find_int_arg(argc, argv, "-s", 0);
 
     int num_procs, rank;
@@ -98,9 +111,15 @@ int main(int argc, char** argv){
     double* A = (double *) malloc(sizeof(double) * n * n);
     double* L = (double *) malloc(sizeof(double) * n * n);
     double* U = (double *) malloc(sizeof(double) * n * n);
-    generateMatrix(A, n, seed);
+    double* A_copy;
+    generate_matrix(A, n, seed);
+    if(rank == 0 && check_correct){
+        A_copy = (double *) malloc(sizeof(double) * n * n);
+        memcpy(A_copy, A, sizeof(double) * n * n);
+    }
     if(rank == 0){
         save(fsave, A, n, n, 'A');
+        // print_matrix(A, n, n, 'A');
     }
     auto start_time = std::chrono::steady_clock::now();
     lu_decomposition(n, A, L, rank, num_procs);
@@ -111,7 +130,12 @@ int main(int argc, char** argv){
         save(fsave, L, n, n, 'L');
         save(fsave, A, n, n, 'U');
     }
-    
+    if(rank == 0 && check_correct){
+        check_correctness(A_copy, L, A, n);
+        // print_matrix(L, n, n, 'L');
+        // print_matrix(A, n, n, 'U');
+        // print_matrix(A_copy, n, n, 'A');
+    }
     if (rank == 0) {
         std::cout << "Average computation time = " << seconds << " seconds for " << n 
                   << " x " << n << " matrices.\n";
