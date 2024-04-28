@@ -1,3 +1,4 @@
 /global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles/serial.dir
+/global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles/mpi.dir
 /global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles/edit_cache.dir
 /global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles/rebuild_cache.dir

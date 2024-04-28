@@ -1,4 +1,4 @@
-CMakeFiles/serial.dir/main.cpp.o: \
+CMakeFiles/mpi.dir/main.cpp.o: \
  /global/homes/z/zhengnan/HPC_LUDecomposition/main.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/12/chrono \
  /usr/include/c++/12/bits/chrono.h /usr/include/c++/12/ratio \

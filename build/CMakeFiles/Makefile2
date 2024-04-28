@@ -64,6 +64,7 @@ CMAKE_BINARY_DIR = /global/homes/z/zhengnan/HPC_LUDecomposition/build
 
 # The main recursive "all" target.
 all: CMakeFiles/serial.dir/all
+all: CMakeFiles/mpi.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,6 +73,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/serial.dir/clean
+clean: CMakeFiles/mpi.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -81,7 +83,7 @@ clean: CMakeFiles/serial.dir/clean
 CMakeFiles/serial.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles --progress-num=1,2,3 "Built target serial"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles --progress-num=4,5,6 "Built target serial"
 .PHONY : CMakeFiles/serial.dir/all
 
 # Build rule for subdir invocation for target.
@@ -99,6 +101,32 @@ serial: CMakeFiles/serial.dir/rule
 CMakeFiles/serial.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/clean
 .PHONY : CMakeFiles/serial.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/mpi.dir
+
+# All Build rule for target.
+CMakeFiles/mpi.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles --progress-num=1,2,3 "Built target mpi"
+.PHONY : CMakeFiles/mpi.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/mpi.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mpi.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /global/homes/z/zhengnan/HPC_LUDecomposition/build/CMakeFiles 0
+.PHONY : CMakeFiles/mpi.dir/rule
+
+# Convenience name for target.
+mpi: CMakeFiles/mpi.dir/rule
+.PHONY : mpi
+
+# clean rule for target.
+CMakeFiles/mpi.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/clean
+.PHONY : CMakeFiles/mpi.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

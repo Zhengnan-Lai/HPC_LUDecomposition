@@ -13,7 +13,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/CMakeGenericSystem.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake"
-  "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
@@ -23,9 +22,11 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Compiler/GNU-C.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Compiler/GNU-CXX.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Compiler/GNU.cmake"
-  "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/FindOpenMP.cmake"
+  "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/FindMPI.cmake"
+  "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/FindMPI/test_mpi.c"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/FindPackageMessage.cmake"
+  "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/FindPkgConfig.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Platform/Linux-GNU-C.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Platform/Linux-GNU-CXX.cmake"
   "/global/common/software/nersc/pm-2021q4/sw/cmake-3.22.0/share/cmake-3.22/Modules/Platform/Linux-GNU.cmake"
@@ -35,6 +36,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.22.0/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.0/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.22.0/CMakeSystem.cmake"
+  "CMakeFiles/FindMPI/test_mpi.cpp"
   )
 
 # The corresponding makefile is:
@@ -45,10 +47,13 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
+  "CMakeFiles/FindMPI/test_mpi.cpp"
+  "CMakeFiles/FindMPI/test_mpi.cpp"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/serial.dir/DependInfo.cmake"
+  "CMakeFiles/mpi.dir/DependInfo.cmake"
   )

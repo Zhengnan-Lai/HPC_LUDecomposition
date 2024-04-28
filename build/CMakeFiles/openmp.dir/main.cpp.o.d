@@ -1,4 +1,4 @@
-CMakeFiles/serial.dir/main.cpp.o: \
+CMakeFiles/openmp.dir/main.cpp.o: \
  /global/homes/z/zhengnan/HPC_LUDecomposition/main.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/12/chrono \
  /usr/include/c++/12/bits/chrono.h /usr/include/c++/12/ratio \
@@ -151,8 +151,4 @@ CMakeFiles/serial.dir/main.cpp.o: \
  /usr/include/c++/12/stdlib.h \
  /usr/lib64/gcc/x86_64-suse-linux/12/include/mwaitintrin.h \
  /usr/include/c++/12/bits/random.tcc /usr/include/c++/12/numeric \
- /usr/include/c++/12/bits/stl_numeric.h \
- /opt/cray/pe/mpich/8.1.28/ofi/gnu/12.3/include/mpi.h \
- /opt/cray/pe/mpich/8.1.28/ofi/gnu/12.3/include/cray_version.h \
- /opt/cray/pe/mpich/8.1.28/ofi/gnu/12.3/include/mpio.h \
- /opt/cray/pe/mpich/8.1.28/ofi/gnu/12.3/include/mpi.h
+ /usr/include/c++/12/bits/stl_numeric.h

@@ -129,12 +129,26 @@ serial/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/build
 .PHONY : serial/fast
 
+#=============================================================================
+# Target rules for targets named mpi
+
+# Build rule for target.
+mpi: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mpi
+.PHONY : mpi
+
+# fast build rule for target.
+mpi/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/build
+.PHONY : mpi/fast
+
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -143,6 +157,7 @@ main.i: main.cpp.i
 # target to preprocess a source file
 main.cpp.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -151,7 +166,32 @@ main.s: main.cpp.s
 # target to generate assembly for a file
 main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/serial.dir/build.make CMakeFiles/serial.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+mpi.o: mpi.cpp.o
+.PHONY : mpi.o
+
+# target to build an object file
+mpi.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/mpi.cpp.o
+.PHONY : mpi.cpp.o
+
+mpi.i: mpi.cpp.i
+.PHONY : mpi.i
+
+# target to preprocess a source file
+mpi.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/mpi.cpp.i
+.PHONY : mpi.cpp.i
+
+mpi.s: mpi.cpp.s
+.PHONY : mpi.s
+
+# target to generate assembly for a file
+mpi.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mpi.dir/build.make CMakeFiles/mpi.dir/mpi.cpp.s
+.PHONY : mpi.cpp.s
 
 serial.o: serial.cpp.o
 .PHONY : serial.o
@@ -185,10 +225,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... mpi"
 	@echo "... serial"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mpi.o"
+	@echo "... mpi.i"
+	@echo "... mpi.s"
 	@echo "... serial.o"
 	@echo "... serial.i"
 	@echo "... serial.s"
