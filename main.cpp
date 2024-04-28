@@ -51,6 +51,12 @@ void printMatrix(double* A, int n, int m, char name) {
 	printf("\n");
 }
 
+void generateMatrix(double* A, int n){
+    for (int i = 1; i <= n * n; i++) {
+		A[i-1] = i % 7;
+	}
+}
+
 // ==============
 // Main Function
 // ==============
@@ -66,25 +72,21 @@ int main(int argc, char** argv){
         return 0;
     }
 
-    int n = 4;
+    int n = 5;
     double* A = (double *) malloc(sizeof(double) * n * n);
     double* L = (double *) malloc(sizeof(double) * n * n);
     double* U = (double *) malloc(sizeof(double) * n * n);
-    // A[0] = 10; A[1] = 5; A[2] = 9; A[3] = 7;
-	for (int i = 1; i <= n * n; i++) {
-		A[i-1] = i % 10;
-	}
-    printMatrix(A, n, n, 'A');
-
+    generateMatrix(A, n);
 	int num_procs, rank;
 	MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
+    if(rank == 0) printMatrix(A, n, n, 'A');
     lu_decomposition(n, A, L, rank, num_procs);
     if(rank == 0){ 
         printMatrix(L, n, n, 'L');
         printMatrix(A, n, n, 'U');
     }
+    MPI_Finalize();
 }
 
