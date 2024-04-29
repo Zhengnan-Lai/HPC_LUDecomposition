@@ -8,6 +8,7 @@
 #include <cassert>
 #include <time.h>
 #include <mpi.h>
+#include <sstream>
 
 void save(std::ofstream& fsave, double* A, int n, int m, char name){
     fsave << "[" << name << "]\n";
@@ -79,7 +80,6 @@ void check_correctness(double* A, double* L, double* U, int n){
         }
         assert(std::abs(A[i * n + j]) < 1e-3);
     }
-
 }
 
 // ==============
@@ -112,7 +112,9 @@ int main(int argc, char** argv){
     double* L = (double *) malloc(sizeof(double) * n * n);
     double* U = (double *) malloc(sizeof(double) * n * n);
     double* A_copy;
-    generate_matrix(A, n, seed);
+    if (rank == 0) {
+        generate_matrix(A, n, seed);
+    }
     if(rank == 0 && check_correct){
         A_copy = (double *) malloc(sizeof(double) * n * n);
         memcpy(A_copy, A, sizeof(double) * n * n);
@@ -121,11 +123,20 @@ int main(int argc, char** argv){
         save(fsave, A, n, n, 'A');
         // print_matrix(A, n, n, 'A');
     }
-    auto start_time = std::chrono::steady_clock::now();
+    
+    double total_compute_time = 0.0;
+    MPI_Barrier(MPI_COMM_WORLD);
+    total_compute_time -= MPI_Wtime();
     lu_decomposition(n, A, L, rank, num_procs);
-    auto end_time = std::chrono::steady_clock::now();
-    std::chrono::duration<double> diff = end_time - start_time;
-    double seconds = diff.count();
+    // Synchronize again before obtaining final time
+    MPI_Barrier(MPI_COMM_WORLD);
+    total_compute_time += MPI_Wtime();
+
+    // auto start_time = std::chrono::steady_clock::now();
+    // lu_decomposition(n, A, L, rank, num_procs);
+    // auto end_time = std::chrono::steady_clock::now();
+    // std::chrono::duration<double> diff = end_time - start_time;
+    // double seconds = diff.count();
     if(rank == 0){ 
         save(fsave, L, n, n, 'L');
         save(fsave, A, n, n, 'U');
@@ -137,8 +148,10 @@ int main(int argc, char** argv){
         // print_matrix(A_copy, n, n, 'A');
     }
     if (rank == 0) {
-        std::cout << "Average computation time = " << seconds << " seconds for " << n 
+        std::stringstream stats;
+        stats << "Average computation time = " << total_compute_time << " seconds for " << n 
                   << " x " << n << " matrices.\n";
+        std::cout << stats.str();
     }
     MPI_Finalize();
 }
