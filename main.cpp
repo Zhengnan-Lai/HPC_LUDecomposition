@@ -85,9 +85,9 @@ void check_correctness(double* A, double* L, double* U, int n){
         }
         // assert(std::abs(A[i * n + j]) < 1e-3);
     }
-    print_matrix(L, n, n, 'L');
-    print_matrix(U, n, n, 'U');
-    print_matrix(A, n, n, 'A');
+    // print_matrix(L, n, n, 'L');
+    // print_matrix(U, n, n, 'U');
+    // print_matrix(A, n, n, 'A');
 }
 
 // ==============
@@ -108,21 +108,22 @@ int main(int argc, char** argv){
     char* savename = find_string_option(argc, argv, "-o", nullptr);
     std::ofstream fsave(savename);
     int n = find_int_arg(argc, argv, "-n", 50);
-    int check_correct = find_int_arg(argc, argv, "-c", 1);
+    int check_correct = find_int_arg(argc, argv, "-c", 0);
     int seed = find_int_arg(argc, argv, "-s", 0);
 
     int num_procs, rank;
-	MPI_Init(&argc, &argv);
-	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
     double* A = (double *) malloc(sizeof(double) * n * n);
     double* L = (double *) malloc(sizeof(double) * n * n);
     double* U = (double *) malloc(sizeof(double) * n * n);
     double* A_copy;
-    if (rank == 0) {
+    if(rank == 0){
         generate_matrix(A, n, seed);
     }
+
+    MPI_Init(&argc, &argv);
+	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Bcast(A, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     if(rank == 0 && check_correct){
         A_copy = (double *) malloc(sizeof(double) * n * n);
         memcpy(A_copy, A, sizeof(double) * n * n);
