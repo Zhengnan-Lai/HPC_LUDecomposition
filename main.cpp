@@ -100,7 +100,7 @@ int main(int argc, char** argv){
     char* savename = find_string_option(argc, argv, "-o", nullptr);
     std::ofstream fsave(savename);
     int n = find_int_arg(argc, argv, "-n", 50);
-    int check_correct = find_int_arg(argc, argv, "-c", 0);
+    int check_correct = find_int_arg(argc, argv, "-c", 1);
     int seed = find_int_arg(argc, argv, "-s", 0);
 
     int num_procs, rank;
