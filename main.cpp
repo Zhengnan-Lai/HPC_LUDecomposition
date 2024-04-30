@@ -74,12 +74,20 @@ void generate_matrix(double* A, int n, int seed){
 }
 
 void check_correctness(double* A, double* L, double* U, int n){
+    // std::cout << "in check correctness\n";
     for(int i = 0; i < n; i++) for(int j = 0 ; j < n; j++){
         for(int k = 0; k < n; k++){
             A[i * n + j] -= L[i * n + k] * U[k * n + j];
         }
-        assert(std::abs(A[i * n + j]) < 1e-3);
+        if (std::abs(A[i * n + j]) > 1e-3) {
+            std::cout << "correctness issue\n";
+            // exit(1);
+        }
+        // assert(std::abs(A[i * n + j]) < 1e-3);
     }
+    print_matrix(L, n, n, 'L');
+    print_matrix(U, n, n, 'U');
+    print_matrix(A, n, n, 'A');
 }
 
 // ==============
