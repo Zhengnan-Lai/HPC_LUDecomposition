@@ -5,7 +5,6 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include <cassert>
 #include <time.h>
 #include <mpi.h>
 #include <sstream>
@@ -53,6 +52,8 @@ char* find_string_option(int argc, char** argv, const char* option, char* defaul
 
 void lu_decomposition(int n, double* A, double* L, int rank, int num_procs);
 
+void pivoted_lu_decomposition(int n, double* A, double* L, int* P, int rank, int num_procs);
+
 void print_matrix(double* A, int n, int m, char name) {
 	printf("[%c]\n", name);
     for(int i = 0; i < n; i++){
@@ -73,21 +74,31 @@ void generate_matrix(double* A, int n, int seed){
 	}
 }
 
-void check_correctness(double* A, double* L, double* U, int n){
-    // std::cout << "in check correctness\n";
+void check_correctness(int n, double* A, double* L, double* U, int* P, int pivot){
+    if(pivot){
+        for(int k = 0; k < n; k++){
+            std::swap_ranges(&A[k * n], &A[(k + 1) * n], &A[P[k] * n]);
+        }
+    }
     for(int i = 0; i < n; i++) for(int j = 0 ; j < n; j++){
         for(int k = 0; k < n; k++){
             A[i * n + j] -= L[i * n + k] * U[k * n + j];
         }
-        if (std::abs(A[i * n + j]) > 1e-3) {
+        if (std::isnan(A[i * n + j]) || std::abs(A[i * n + j]) > 1e-3) {
             std::cout << "correctness issue\n";
-            // exit(1);
         }
-        // assert(std::abs(A[i * n + j]) < 1e-3);
     }
-    // print_matrix(L, n, n, 'L');
-    // print_matrix(U, n, n, 'U');
-    // print_matrix(A, n, n, 'A');
+    print_matrix(L, n, n, 'L');
+    print_matrix(U, n, n, 'U');
+    print_matrix(A, n, n, 'A');
+    if(pivot){
+        printf("[P]\n");
+        for(int j = 0; j < n; j++){
+            printf("%d ", P[j]);
+        }
+        printf("\n");   
+        printf("\n");
+    }
 }
 
 // ==============
@@ -103,58 +114,57 @@ int main(int argc, char** argv){
         std::cout << "-o <filename>: set the output file name" << std::endl;
         std::cout << "-s <int>: set matrix initialization seed" << std::endl;
         std::cout << "-c <int>: check correctness of the result" << std::endl;
+        std::cout << "-p <int>: perform partial pivoting"<< std::endl;
         return 0;
     }
     char* savename = find_string_option(argc, argv, "-o", nullptr);
     std::ofstream fsave(savename);
     int n = find_int_arg(argc, argv, "-n", 50);
-    int check_correct = find_int_arg(argc, argv, "-c", 0);
     int seed = find_int_arg(argc, argv, "-s", 0);
+    int check_correct = find_int_arg(argc, argv, "-c", 0);
+    int pivot = find_int_arg(argc, argv, "-p", 0);
 
     int num_procs, rank;
     double* A = (double *) malloc(sizeof(double) * n * n);
     double* L = (double *) malloc(sizeof(double) * n * n);
     double* U = (double *) malloc(sizeof(double) * n * n);
+    int* P;
     double* A_copy;
-    if(rank == 0){
-        generate_matrix(A, n, seed);
-    }
-
+    generate_matrix(A, n, seed);
+    
     MPI_Init(&argc, &argv);
 	MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Bcast(A, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     if(rank == 0 && check_correct){
+        print_matrix(A, n, n, 'A');
         A_copy = (double *) malloc(sizeof(double) * n * n);
         memcpy(A_copy, A, sizeof(double) * n * n);
     }
     if(rank == 0){
         save(fsave, A, n, n, 'A');
-        // print_matrix(A, n, n, 'A');
     }
     
     double total_compute_time = 0.0;
     MPI_Barrier(MPI_COMM_WORLD);
     total_compute_time -= MPI_Wtime();
-    lu_decomposition(n, A, L, rank, num_procs);
+    if(pivot){
+        P = (int *) malloc(sizeof(int) * n);
+        pivoted_lu_decomposition(n, A, L, P, rank, num_procs);
+    }
+    else{
+        lu_decomposition(n, A, L, rank, num_procs);
+    }
     // Synchronize again before obtaining final time
     MPI_Barrier(MPI_COMM_WORLD);
     total_compute_time += MPI_Wtime();
 
-    // auto start_time = std::chrono::steady_clock::now();
-    // lu_decomposition(n, A, L, rank, num_procs);
-    // auto end_time = std::chrono::steady_clock::now();
-    // std::chrono::duration<double> diff = end_time - start_time;
-    // double seconds = diff.count();
     if(rank == 0){ 
         save(fsave, L, n, n, 'L');
         save(fsave, A, n, n, 'U');
     }
     if(rank == 0 && check_correct){
-        check_correctness(A_copy, L, A, n);
-        // print_matrix(L, n, n, 'L');
-        // print_matrix(A, n, n, 'U');
-        // print_matrix(A_copy, n, n, 'A');
+        check_correctness(n, A_copy, L, A, P, pivot);
     }
     if (rank == 0) {
         std::stringstream stats;

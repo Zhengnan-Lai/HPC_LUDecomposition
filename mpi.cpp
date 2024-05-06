@@ -53,10 +53,14 @@ void lu_decomposition(int n, double* A, double* L, int rank, int num_procs) {
 	if (rank == 0) {
 		// Root process: prepare to receive data from all processes, including itself
 		MPI_Gather(MPI_IN_PLACE, (endRow-startRow)*n, MPI_DOUBLE, L, (endRow-startRow)*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-		MPI_Gather(MPI_IN_PLACE, (endRow-startRow)*n, MPI_DOUBLE, A, (endRow-startRow)*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+		// MPI_Gather(MPI_IN_PLACE, (endRow-startRow)*n, MPI_DOUBLE, A, (endRow-startRow)*n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	} else {
 		// Non-root processes: send data to root
 		MPI_Gather(&L[startRow*n], (endRow-startRow)*n, MPI_DOUBLE, NULL, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-		MPI_Gather(&A[startRow*n], (endRow-startRow)*n, MPI_DOUBLE, NULL, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+		// MPI_Gather(&A[startRow*n], (endRow-startRow)*n, MPI_DOUBLE, NULL, 0, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 	}
+}
+
+void pivoted_lu_decomposition(int n, double* A, double* L, int* P, int rank, int num_procs){
+	return;
 }
