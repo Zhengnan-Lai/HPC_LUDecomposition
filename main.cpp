@@ -86,7 +86,7 @@ void generate_matrix(double* A, int n, int seed){
 }
 
 void check_correctness(int n, double* A, double* L, double* U, int* P, int pivot){
-    print_matrix(A, n, n, 'A');
+    // print_matrix(A, n, n, 'A');
     if(pivot){
         for(int k = 0; k < n; k++){
             std::swap_ranges(&A[k * n], &A[(k + 1) * n], &A[P[k] * n]);
@@ -100,10 +100,10 @@ void check_correctness(int n, double* A, double* L, double* U, int* P, int pivot
             std::cout << "correctness issue\n";
         }
     }
-    print_matrix(L, n, n, 'L');
-    print_matrix(U, n, n, 'U');
-    print_matrix(A, n, n, 'O');
-    print_matrix(P, 1, n, 'P');
+    // print_matrix(L, n, n, 'L');
+    // print_matrix(U, n, n, 'U');
+    // print_matrix(A, n, n, 'O');
+    // print_matrix(P, 1, n, 'P');
 }
 
 // ==============

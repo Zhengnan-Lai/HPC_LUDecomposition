@@ -70,29 +70,29 @@ void pivoted_lu_decomposition(int n, double* A, double* L, int* P, int rank, int
 		P[k] = global_p.index;
 		// swap row if necessary
 		if(P[k] != k){
-			std::swap_ranges(&A[k * n], &A[(k + 1) * n], &A[P[k] * n]);
 			if(k / rowsPerProcessor == P[k] / rowsPerProcessor){
 				// if in the same processor, just swap
 				if(rank == k / rowsPerProcessor){
+					std::swap_ranges(&A[k * n], &A[(k + 1) * n], &A[P[k] * n]);
 					std::swap_ranges(&L[k * n], &L[k * n + k], &L[P[k] * n]);
 				}
 			}
 			else{
 				// if not in the same processor, communicate
 				if(rank == k / rowsPerProcessor){
-					// MPI_Send(&A[k * n], n, MPI_DOUBLE, P[k] / rowsPerProcessor, 0, MPI_COMM_WORLD);
+					MPI_Send(&A[k * n], n, MPI_DOUBLE, P[k] / rowsPerProcessor, 0, MPI_COMM_WORLD);
 					MPI_Send(&L[k * n], k, MPI_DOUBLE, P[k] / rowsPerProcessor, 1, MPI_COMM_WORLD);
 				}
 				if(rank == P[k] / rowsPerProcessor){
-					// MPI_Send(&A[P[k] * n], n, MPI_DOUBLE, k / rowsPerProcessor, 2, MPI_COMM_WORLD);
+					MPI_Send(&A[P[k] * n], n, MPI_DOUBLE, k / rowsPerProcessor, 2, MPI_COMM_WORLD);
 					MPI_Send(&L[P[k] * n], k, MPI_DOUBLE, k / rowsPerProcessor, 3, MPI_COMM_WORLD);
 				}
 				if(rank == k / rowsPerProcessor){
-					// MPI_Recv(&A[k * n], n, MPI_DOUBLE, P[k] / rowsPerProcessor, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+					MPI_Recv(&A[k * n], n, MPI_DOUBLE, P[k] / rowsPerProcessor, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 					MPI_Recv(&L[k * n], k, MPI_DOUBLE, P[k] / rowsPerProcessor, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				}
 				if(rank == P[k] / rowsPerProcessor){
-					// MPI_Recv(&A[P[k] * n], n, MPI_DOUBLE, k / rowsPerProcessor, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+					MPI_Recv(&A[P[k] * n], n, MPI_DOUBLE, k / rowsPerProcessor, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 					MPI_Recv(&L[P[k] * n], k, MPI_DOUBLE, k / rowsPerProcessor, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 				}
 			}
