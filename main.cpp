@@ -65,6 +65,17 @@ void print_matrix(double* A, int n, int m, char name) {
 	printf("\n");
 }
 
+void print_matrix(int* A, int n, int m, char name) {
+	printf("[%c]\n", name);
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            printf("%d ", A[i * n + j]);
+        }
+        printf("\n");
+    }
+	printf("\n");
+}
+
 void generate_matrix(double* A, int n, int seed){
     std::random_device rd;
     std::mt19937 gen(seed ? seed : rd());
@@ -75,6 +86,7 @@ void generate_matrix(double* A, int n, int seed){
 }
 
 void check_correctness(int n, double* A, double* L, double* U, int* P, int pivot){
+    print_matrix(A, n, n, 'A');
     if(pivot){
         for(int k = 0; k < n; k++){
             std::swap_ranges(&A[k * n], &A[(k + 1) * n], &A[P[k] * n]);
@@ -90,15 +102,8 @@ void check_correctness(int n, double* A, double* L, double* U, int* P, int pivot
     }
     print_matrix(L, n, n, 'L');
     print_matrix(U, n, n, 'U');
-    print_matrix(A, n, n, 'A');
-    if(pivot){
-        printf("[P]\n");
-        for(int j = 0; j < n; j++){
-            printf("%d ", P[j]);
-        }
-        printf("\n");   
-        printf("\n");
-    }
+    print_matrix(A, n, n, 'O');
+    print_matrix(P, 1, n, 'P');
 }
 
 // ==============
@@ -137,7 +142,6 @@ int main(int argc, char** argv){
 	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Bcast(A, n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     if(rank == 0 && check_correct){
-        print_matrix(A, n, n, 'A');
         A_copy = (double *) malloc(sizeof(double) * n * n);
         memcpy(A_copy, A, sizeof(double) * n * n);
     }
